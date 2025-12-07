@@ -9,9 +9,9 @@
     <body>
         <div class="container">
             <div class="calculator">
-                <form>
+                <form onsubmit="return false;">
                 <div class="display">
-                    <input type="text" name="display">
+                    <input type="text" id="display">
                 </div>
                 <div>
                     <input type="button" value="C" onclick="display.value='' " class="operator"> 
@@ -42,12 +42,54 @@
               <div>
                 <input type="button" value="00"onclick="display.value +='00' ">
                 <input type="button" value="0"onclick="display.value +='0' ">
-                <input type="button" value="=" class="equal operator" onclick="display.value =eval(display.value)">
+                <input type="button" value="=" class="equal operator" onclick="calculate()">
 
                 
               </div>
                 </form>
+                <div class="history">
+            <h3>Calculation history</h3>
+            <ul id="historyList"></ul>
+        </div>
             </div>
         </div>
+
+        
+
+        <script>
+            let history=[];
+            function calculate(){
+                let display = document.getElementById("display");
+                let expression = display.value;
+                if (expression === "" )return;
+                let result;
+                try{
+                    result = eval(expression);
+                } catch {
+                    result = "Error";
+                }
+
+                //store calculation
+                let entry =`${expression} = ${result}`;
+                history.push(entry);
+                
+                //show result
+                display.value = result;
+
+                //update history on screen
+                showHistory();
+
+            }
+            function showHistory(){
+                let list = document.getElementById("historyList");
+                list.innerHTML ="";
+
+                history.forEach(item=> {
+                    let li = document.createElement("li");
+                    li.textContent = item;
+                    list.appendChild(li);
+                });
+            }
+        </script>
     </body>
 </html>    
